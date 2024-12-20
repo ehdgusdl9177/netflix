@@ -14,7 +14,6 @@ interface Movie {
   id: number;
   title: string;
 }
-
 @Controller('movie')
 export class AppController {
   private movies: Movie[] = [
