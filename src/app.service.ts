@@ -45,4 +45,16 @@ export class AppService {
 
     return movie;
   }
+
+  updateMovie(id: number, title: string) {
+    const movie = this.movies.find((m) => m.id === +id);
+
+    if (!movie) {
+      throw new NotFoundException('존재하지 않는 ID의 영화입니다!');
+    }
+
+    Object.assign(movie, { title });
+
+    return movie;
+  }
 }
