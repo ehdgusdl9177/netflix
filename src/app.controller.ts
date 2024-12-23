@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -35,16 +34,8 @@ export class AppController {
     return this.appService.updateMovie(+id, title);
   }
 
-  //   @Delete(':id')
-  //   deleteMovie(@Param('id') id: string) {
-  //     const movieIndex = this.movies.findIndex((m) => m.id === +id);
-
-  //     if (movieIndex === -1) {
-  //       throw new NotFoundException('존재하지 않는 ID의 영화입니다!');
-  //     }
-
-  //     this.movies.splice(movieIndex, 1);
-
-  //     return id;
-  //   }
+  @Delete(':id')
+  deleteMovie(@Param('id') id: string) {
+    return this.appService.deleteMovie(+id);
+  }
 }
