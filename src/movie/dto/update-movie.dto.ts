@@ -1,13 +1,25 @@
 import {
   Equals,
+  IsArray,
+  IsBoolean,
+  IsDateString,
   IsDefined,
   IsEmpty,
+  IsEnum,
   IsIn,
+  IsInt,
   IsNotEmpty,
   IsNotIn,
+  IsNumber,
   IsOptional,
+  IsString,
   NotEquals,
 } from 'class-validator';
+
+enum MovieGenre {
+  Fantasy = 'fantasy',
+  Action = 'action',
+}
 
 export class UpdateMovieDto {
   @IsNotEmpty()
@@ -29,5 +41,12 @@ export class UpdateMovieDto {
   // Array
   // @IsIn(['action', 'fantasy'])
   // @IsNotIn(['action', 'fantasy'])
+  // @IsBoolean()
+  // @IsString()
+  // @IsNumber()
+  // @IsInt()
+  // @IsArray()
+  // @IsEnum(MovieGenre)
+  // @IsDateString()
   test: string;
 }
