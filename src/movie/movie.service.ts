@@ -18,7 +18,7 @@ export class MovieService {
     const movie2 = new Movie();
 
     movie2.id = 2;
-    movie2.title = '반지의제왕2';
+    movie2.title = '반지의제왕';
     movie2.genre = 'action';
 
     this.movies.push(movie1, movie2);
