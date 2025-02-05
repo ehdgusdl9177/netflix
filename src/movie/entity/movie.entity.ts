@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
+import { ChildEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, TableInheritance, UpdateDateColumn, VersionColumn } from "typeorm";
 
 export class BaseEntity {
   @CreateDateColumn()
@@ -11,8 +11,17 @@ export class BaseEntity {
   version: number;
 }
 
+// movie / series
+// runtime (영화 상영 시간) / seriesCount (몇 부작인지)
+
 @Entity()
-export class Movie extends BaseEntity {
+@TableInheritance({
+  column: {
+    type: 'varchar',
+    name: 'type'
+  }
+})
+export class Content extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,4 +30,16 @@ export class Movie extends BaseEntity {
 
   @Column()
   genre: string;
+}
+
+@ChildEntity()
+export class Movie extends Content {
+  @Column()
+  runtime: number;
+}
+
+@ChildEntity()
+export class Series extends Content{
+  @Column()
+  seriesCount: number;
 }
