@@ -24,7 +24,8 @@ export class MovieService {
     return this.movieRepository.findAndCount({
       where: {
         title: Like(`%${title}%`)
-      }
+      },
+      relations: ['detail']
     })
   }
 
@@ -32,7 +33,8 @@ export class MovieService {
     const movie = await this.movieRepository.findOne({
       where: {
         id
-      }
+      },
+      relations: ['detail']
     });
 
     if (!movie) {
