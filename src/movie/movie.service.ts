@@ -97,7 +97,8 @@ export class MovieService {
     const movie = await this.movieRepository.findOne({
       where: {
         id
-      }
+      },
+      relations: ['detail']
     });
 
     if(!movie) {
@@ -105,6 +106,7 @@ export class MovieService {
     }
 
     await this.movieRepository.delete(id);
+    await this.movieDetailRepository.delete(movie.detail.id)
 
     return id;
   }
