@@ -12,7 +12,9 @@ export class Movie extends BaseTable {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true
+  })
   title: string;
 
   @Column()
@@ -22,7 +24,8 @@ export class Movie extends BaseTable {
     () => MovieDetail,
     movieDetail => movieDetail.id,
     {
-      cascade: true
+      cascade: true,
+      nullable:false
     }
   )
 
@@ -34,6 +37,7 @@ export class Movie extends BaseTable {
     director => director.id,
     {
       cascade: true,
+      nullable: false
     }
   )
   director: Director
