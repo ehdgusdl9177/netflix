@@ -1,12 +1,14 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateMovieDto {
   @IsNotEmpty()
   @IsOptional()
+  @IsString()
   title?: string;
 
   @IsNotEmpty()
   @IsOptional()
+  @IsString()
   genre?: string;
 
   @IsNotEmpty()
@@ -14,5 +16,7 @@ export class UpdateMovieDto {
   detail?: string;
 
   @IsNotEmpty()
-  directorId: number;
+  @IsNumber()
+  @IsOptional()
+  directorId?: number;
 }
