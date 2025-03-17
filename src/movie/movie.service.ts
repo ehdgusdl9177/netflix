@@ -23,27 +23,44 @@ export class MovieService {
   ) {}
 
   async findAll(title?: string) {
-    if(!title) {
-      return [await this.movieRepository.find({
-        relations: ['director']
-      }), await this.movieRepository.count()];
+    const qb = await this.movieRepository.createQueryBuilder('movie')
+    .leftJoinAndSelect('movie.director', 'director')
+    .leftJoinAndSelect('movie.genres', 'genres');
+
+    if(title) {
+      qb.where('movie.title LIKE :title', {title: `%${title}%`})
     }
 
-    return this.movieRepository.findAndCount({
-      where: {
-        title: Like(`%${title}%`)
-      },
-      relations: ['director', 'genres']
-    })
+    return await qb.getManyAndCount();
+
+    // if(!title) {
+    //   return [await this.movieRepository.find({
+    //     relations: ['director', 'genres']
+    //   }), await this.movieRepository.count()];
+    // }
+
+    // return this.movieRepository.findAndCount({
+    //   where: {
+    //     title: Like(`%${title}%`)
+    //   },
+    //   relations: ['director', 'genres']
+    // })
   }
 
   async findOne(id: number) {
-    const movie = await this.movieRepository.findOne({
-      where: {
-        id
-      },
-      relations: ['detail', 'director', 'genres']
-    });
+    const movie = await this.movieRepository.createQueryBuilder('movie')
+    .leftJoinAndSelect('movie.director', 'director')
+    .leftJoinAndSelect('movie.genres', 'genres')
+    .leftJoinAndSelect('movie.detail', 'detail')
+    .where('movie.id = :id', {id})
+    .getOne();
+
+    // const movie = await this.movieRepository.findOne({
+    //   where: {
+    //     id
+    //   },
+    //   relations: ['detail', 'director', 'genres']
+    // });
 
     if (!movie) {
       throw new NotFoundException('존재하지 않는 ID의 영화입니다!');
