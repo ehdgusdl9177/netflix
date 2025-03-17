@@ -251,7 +251,13 @@ export class MovieService {
       throw new NotFoundException('존재하지 않는 ID의 영화입니다!');
     }
 
-    await this.movieRepository.delete(id);
+
+    await this.movieRepository.createQueryBuilder()
+    .delete()
+    .where('id = :id', {id})
+    .execute()
+
+    // await this.movieRepository.delete(id);
     await this.movieDetailRepository.delete(movie.detail.id);
 
     return id;
