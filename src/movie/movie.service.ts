@@ -90,16 +90,50 @@ export class MovieService {
       throw new NotFoundException(`존재하지 않는 장르가 있습니다! 존재하는 ids -> ${genres.map(genre => genre.id).join(',')}`)
     }
 
-    const movie = await this.movieRepository.save({
+    const movieDetail = await this.movieDetailRepository.createQueryBuilder()
+    .insert()
+    .into(MovieDetail)
+    .values({
+      detail: createMovieDto.detail
+    })
+    .execute();
+
+    const movieDetailId = movieDetail.identifiers[0].id;
+
+    const movie = await this.movieRepository.createQueryBuilder()
+    .insert()
+    .into(Movie)
+    .values({
       title: createMovieDto.title,
       detail: {
-        detail: createMovieDto.detail
+        id: movieDetailId
       },
       director,
-      genres,
-    });
+    })
+    .execute();
+
+    const movieId = movie.identifiers[0].id;
+
+    await this.movieRepository.createQueryBuilder()
+    .relation(Movie, 'genres')
+    .of(movieId)
+    .add(genres.map(genre => genre.id))
+
+    // const movie = await this.movieRepository.save({
+    //   title: createMovieDto.title,
+    //   detail: {
+    //     detail: createMovieDto.detail
+    //   },
+    //   director,
+    //   genres,
+    // });
     
-    return movie;
+    return await this.movieRepository.findOne({
+      where: {
+        id: movieId
+      },
+      relations: ['detail', 'director', 'genres']
+    })
   }
 
   async update(id: number,updateMovieDto: UpdateMovieDto) {
